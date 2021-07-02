@@ -143,18 +143,18 @@ def send_mail(newly_added_realstate , newly_sold_realstate):
     context = ssl.create_default_context()
     if(len(newly_added_realstate)>0 or len(newly_sold_realstate)>0 ):
         if(len(newly_added_realstate)!=0):
-            message+="newly added realstate --->\n\n"
+            message+="New Listings --->\n\n"
             for k in range(0, len(newly_added_realstate)):
                 message+=newly_added_realstate[k]+"\n"
         message+="\n"
         if (len(newly_sold_realstate) != 0):
-            message += "newly sold realstate --->\n\n"
+            message += "Recently Sold Homes --->\n\n"
             for k in range(0, len(newly_sold_realstate)):
                 message += newly_sold_realstate[k] + "\n"
         print("Message content for the mail :")
         print(message)
     else:
-        message = "No new real state data"
+        message = "No new real estate data"
     try:
         with smtplib.SMTP_SSL(gmail_server, gmail_port, context=context) as server:
             server.login(sender_mail, password)
