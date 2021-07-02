@@ -10,6 +10,7 @@ from selenium.webdriver.support.wait import WebDriverWait
 from selenium.webdriver.support import expected_conditions as EC
 from selenium.webdriver.chrome.options import Options
 import time
+import smtplib, ssl
 
 app = Flask(__name__)
 
@@ -129,10 +130,38 @@ def scrape_data(checking_urls):
     file_on.close()
 
 def send_mail(newly_added_realstate , newly_sold_realstate):
+    message = ""
     print("newly_added_realstate")
     print(newly_added_realstate)
     print("newly_sold_realstate")
     print(newly_sold_realstate)
+    sender_mail = "agentlistingupdates@gmail.com"
+    password = "Testacc101"
+    receiver_mail = "ray@infiniteviewsllc.com"
+    gmail_server = "smtp.gmail.com"
+    gmail_port = 465
+    context = ssl.create_default_context()
+    if(len(newly_added_realstate)>0 or len(newly_sold_realstate)>0 ):
+        if(len(newly_added_realstate)!=0):
+            message+="newly added realstate --->\n\n"
+            for k in range(0, len(newly_added_realstate)):
+                message+=newly_added_realstate[k]+"\n"
+        message+="\n"
+        if (len(newly_sold_realstate) != 0):
+            message += "newly sold realstate --->\n\n"
+            for k in range(0, len(newly_sold_realstate)):
+                message += newly_sold_realstate[k] + "\n"
+        print("Message content for the mail :")
+        print(message)
+    else:
+        message = "No new real state data"
+    try:
+        with smtplib.SMTP_SSL(gmail_server, gmail_port, context=context) as server:
+            server.login(sender_mail, password)
+            server.sendmail(sender_mail, receiver_mail, message)
+            print("Mail sent from " + sender_mail + " to " + receiver_mail)
+    except:
+        print("Fail sending mail from " + sender_mail + " to " + receiver_mail)
 
 count = 0
 def check_realstates():
@@ -145,26 +174,19 @@ def check_realstates():
             print(count)
             count+=1
         else:
-            # while(True):
-            #     try:
-            # print("Doing ....")
             check_file = open("urls")
             checking_urls = check_file.read().strip().split("\n")
             print(checking_urls)
             scrape_data(checking_urls)
             count=0
-            # break
-                # except:
-                #     print("Issue in reading file, will retry in 5 seconds")
-                #     time.sleep(5)
-                #     continue
+
 
 @app.route('/', methods=['GET', 'POST'])
 def upload_file():
     try:
         if request.method == 'POST':
             pw = request.form.get("pw")
-            if(not pw=="123"):
+            if(not pw=="6589"):
                 return "Wrong Password"
             url_content = request.form.get("urls")
             raw_urls = url_content.strip().split("\n")
