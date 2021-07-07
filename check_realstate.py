@@ -9,6 +9,7 @@ from selenium.webdriver.chrome.options import Options
 import time
 
 url = 'https://www.realtor.com/realestateagents/catherine-qian_los-altos_ca_549162_150199108'
+url = 'https://www.realtor.com/realestateagents/ben-caballero_addison_tx_560046_970894102'
 
 options = Options()
 # options.add_argument("--window-size=1920,1080")
@@ -35,9 +36,23 @@ driver.find_element_by_xpath('//*[@id="review"]/div[2]/i').click()
 time.sleep(2)
 
 
+count_onmarket = 4
+while(True):
+    try:
+        driver.find_element_by_xpath('//*[@id="collapseOne5"]/div[2]/div/div[3]/p').click()
+        time.sleep(2)
+        count_onmarket += 4
+        print("cliked on new onmarket")
+        if(count_onmarket>=8):
+            break
+    except:
+        break
+
+print("count_onmarket: "+str(count_onmarket))
+
 #on market
 onmarket_url_list=[]
-for i in range(1,5):
+for i in range(1,count_onmarket+1):
     try:
         driver.find_element_by_xpath('//*[@id="collapseOne5"]/div[2]/div/div[2]/div['+str(i)+']/div/div[1]/div').click()
         time.sleep(2)
@@ -51,9 +66,23 @@ for i in range(1,5):
 
 print(onmarket_url_list)
 
+count_offmarket = 4
+while(True):
+    try:
+        driver.find_element_by_xpath('//*[@id="collapseOne5"]/div[3]/div/div[3]/p').click()
+        time.sleep(2)
+        count_offmarket += 4
+        print("cliked on new onmarket")
+        if(count_offmarket>=8):
+            break
+    except:
+        break
+
+print("count_offmarket: "+str(count_offmarket))
+
 #off market
 offmarket_url_list=[]
-for i in range(1,5):
+for i in range(1,count_offmarket+1):
     try:
         driver.find_element_by_xpath('//*[@id="collapseOne5"]/div[3]/div/div[2]/div['+str(i)+']/div/div[1]/div').click()
         time.sleep(2)
