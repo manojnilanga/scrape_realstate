@@ -239,4 +239,4 @@ def upload_file():
 if __name__ == "__main__":
     t = Thread(target=check_realstates)
     t.start()
-    app.run(host='0.0.0.0',port=80)
+    app.run(host='0.0.0.0',port=5000)
