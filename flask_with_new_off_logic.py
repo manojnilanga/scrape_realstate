@@ -21,12 +21,13 @@ def get_previous_count(agent):
     file.close()
 
     for z in range(0,len(agents_with_count)):
-        if(agents_with_count.split("$")[0]==agent):
-            return int(agents_with_count.split("$")[1])
+        if(agents_with_count[z].split("$")[0]==agent):
+            return int(agents_with_count[z].split("$")[1])
     return 0
 
 
 def scrape_data(checking_urls):
+    print("Started scraping dat ...")
     final_onmarket = []
     final_offmarket = []
 
@@ -78,7 +79,7 @@ def scrape_data(checking_urls):
             except:
                 print("break")
                 break
-        print("sold_count: " + sold_count)
+        print("sold_count: " + str(sold_count))
 
 
         count_onmarket = 4
@@ -148,13 +149,22 @@ def scrape_data(checking_urls):
         previous_sold_count = get_previous_count(agent)
         new_sold_count = sold_count - previous_sold_count
         if(new_sold_count>0):
-            new_solds_data+=offmarket_url_list[:new_sold_count]
+            if(new_sold_count>7):
+                new_solds_data+=offmarket_url_list
+            else:
+                new_solds_data += offmarket_url_list[:new_sold_count]
         new_agents_and_count.append(agent+"$"+str(sold_count))
 
 
         final_offmarket += offmarket_url_list
         time.sleep(4)
     driver.close()
+
+    file_off_count = open("off_market_count.txt", "w")
+    for m in range(0, len(new_agents_and_count)):
+        file_off_count.write(new_agents_and_count[m]+"\n")
+    file_off_count.close()
+
 
     #checking old data with new for send email
     file_off = open("off_market.txt")
@@ -187,7 +197,7 @@ def scrape_data(checking_urls):
             if(final_offmarket[q] in old_on):
                 newly_sold_realstate.append(final_offmarket[q])
 
-        send_mail(newly_added_realstate, newly_sold_realstate)
+        send_mail(newly_added_realstate, new_solds_data)
 
     #writing new data to files
     file_off = open("off_market.txt","w")
