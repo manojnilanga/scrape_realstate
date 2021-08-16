@@ -59,8 +59,8 @@ def scrape_data(checking_urls):
 
         # listings arrow down
         WebDriverWait(driver, 25).until(
-            EC.presence_of_element_located((By.XPATH, '//*[@id="review"]/div[2]/i')))
-        driver.find_element_by_xpath('//*[@id="review"]/div[2]/i').click()
+            EC.presence_of_element_located((By.XPATH, '//*[@id="review"]/div[3]/i')))
+        driver.find_element_by_xpath('//*[@id="review"]/div[3]/i').click()
         time.sleep(2)
 
         #getting sold amount
